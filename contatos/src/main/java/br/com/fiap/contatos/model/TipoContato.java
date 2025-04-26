@@ -12,7 +12,7 @@ public class TipoContato {
     @SequenceGenerator(name = "TBL_TIPO_CONTATO_SEQ", sequenceName = "TBL_TIPO_CONTATO_SEQ", allocationSize = 1)
     private Long id;
 
-    public String tipo;
+    private String tipo;
 
 
     public Long getId() {

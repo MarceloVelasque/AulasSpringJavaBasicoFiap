@@ -2,7 +2,9 @@ package br.com.fiap.contatos;
 
 import br.com.fiap.contatos.dao.Conexao;
 import br.com.fiap.contatos.dao.ContatoDao;
+import br.com.fiap.contatos.dao.TipoContatoDao;
 import br.com.fiap.contatos.model.Contato;
+import br.com.fiap.contatos.model.TipoContato;
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalDate;
@@ -15,22 +17,30 @@ public class ContatoApp {
 
         //Criação EntityManager de forma correta com classe para conexão e uma classe DAO para a classe Contato
         EntityManager em = Conexao.getEntityManager();
-   // cadastrar(em);
+    cadastrar(em);
     //atualizar(em);
     //excluir(em);
     //consultarContatoPorId(em);
       //  listarTodosOsContatos(em);
-        listarContatosPeloEmail(em);
+      //  listarContatosPeloEmail(em);
 
     }
     public static void cadastrar(EntityManager em){
-        Contato contato = new Contato();
-        contato.setNome("João da Silva");
-        contato.setEmail("joao@gmail.com");
+
+        TipoContato tipoContato = new TipoContato();
+        tipoContato.setTipo("Familia");
+
+        TipoContatoDao tipoContatoDao = new TipoContatoDao(em);
+        em.getTransaction().begin();
+        tipoContatoDao.salvar(tipoContato);
+                Contato contato = new Contato();
+        contato.setNome("Mmarcelo da Silva");
+        contato.setEmail("silvagmail.com");
         contato.setDataNascimento(LocalDate.of(1992,01,23));
+        contato.setTipoContato(tipoContato);
+
         //criar uma instância do DAO
         ContatoDao contatoDao = new ContatoDao(em);
-        em.getTransaction().begin();
         contatoDao.salvar(contato);
         em.getTransaction().commit();
 
