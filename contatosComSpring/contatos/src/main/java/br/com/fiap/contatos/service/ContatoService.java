@@ -56,5 +56,15 @@ public class ContatoService {
         }
     }
 
+    public Contato buscarPeloNome(String nome) {
+        Optional<Contato> contatoOptional = Optional.ofNullable(contatoRepository.findByNome(nome));
+
+        if(contatoOptional.isPresent()) {
+            return contatoOptional.get();
+        } else {
+            throw new RuntimeException("Nome não encontrado");
+        }
+    }
+
 
 }
