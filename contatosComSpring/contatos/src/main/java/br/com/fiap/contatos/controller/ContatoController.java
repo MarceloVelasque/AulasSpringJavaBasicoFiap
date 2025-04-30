@@ -37,7 +37,7 @@ public class ContatoController {
 
 
     @PutMapping("/contatos")
-    public Contato atualizar(Contato contato) {
+    public Contato atualizar(@RequestBody Contato contato) {
         return contatoService.atualizar(contato);
     }
 

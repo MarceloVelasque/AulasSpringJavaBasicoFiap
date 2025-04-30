@@ -11,7 +11,7 @@ public class Contato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "CONTATOS_SEQ")
-    @SequenceGenerator(name = "CONTATOS_SEQ", sequenceName = "CONTATOS_SEQ", allocationSize = 50)
+    @SequenceGenerator(name = "CONTATOS_SEQ", sequenceName = "CONTATOS_SEQ", allocationSize = 1)
     private Long id;
 
     private String nome;
