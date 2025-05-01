@@ -1,5 +1,6 @@
 package br.com.fiap.contatos.controller;
 
+import br.com.fiap.contatos.dto.ContatoCadastroDto;
 import br.com.fiap.contatos.dto.ContatoExibicaoDto;
 import br.com.fiap.contatos.model.Contato;
 import br.com.fiap.contatos.service.ContatoService;
@@ -19,8 +20,8 @@ public class ContatoController {
 
     @PostMapping("/contatos")
     @ResponseStatus(HttpStatus.CREATED) //anotação de Status que objeto foi criado ou gravado
-    public ContatoExibicaoDto gravar(@RequestBody Contato contato) {
-        return contatoService.gravar(contato);
+    public ContatoExibicaoDto gravar(@RequestBody ContatoCadastroDto contatoCadastroDto) {
+        return contatoService.gravar(contatoCadastroDto);
     }
 
     @GetMapping("/contatos")
