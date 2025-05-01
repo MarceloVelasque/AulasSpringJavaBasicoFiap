@@ -2,6 +2,7 @@ package br.com.fiap.contatos.service;
 
 import br.com.fiap.contatos.dto.ContatoCadastroDto;
 import br.com.fiap.contatos.dto.ContatoExibicaoDto;
+import br.com.fiap.contatos.exception.UsuarioNaoEncontradoException;
 import br.com.fiap.contatos.model.Contato;
 import br.com.fiap.contatos.repository.ContatoRepository;
 import org.springframework.beans.BeanUtils;
@@ -31,7 +32,7 @@ public class ContatoService {
         if (contatoOptional.isPresent()) {
             return  new ContatoExibicaoDto(contatoOptional.get());
         } else {
-            throw new RuntimeException("Contato não encontrado");
+            throw new UsuarioNaoEncontradoException("Contato não existe");
         }
 
     }
