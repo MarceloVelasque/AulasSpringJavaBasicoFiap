@@ -61,4 +61,25 @@ public class ContatoController {
         return contatoService.mostrarAniversariantes(dataInicial, dataFinal);
     }
 
+    //consulta jpql pelo nome
+    @GetMapping("/contatos/nome/{nome}")
+    @ResponseStatus(HttpStatus.OK)
+    public ContatoExibicaoDto buscarContatoPeloNome(@PathVariable String nome) {
+        return contatoService.buscarPeloNome(nome);
+    }
+
+//essa é outra forma de fazer no controle a consulta pelo nome usando jpql
+    @GetMapping(value = "/contatos",params = "nome")
+    @ResponseStatus(HttpStatus.OK)
+    public ContatoExibicaoDto buscarContatosPorNome(@RequestParam String nome) {
+        return contatoService.buscarPeloNome(nome);
+    }
+
+    // consulta de data JPQL de um periodo de data
+    @GetMapping(value = "/contatos", params = {"dataInicio", "dataFinal"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<ContatoExibicaoDto> listarAniversariantes(@RequestParam LocalDate dataInicial,@RequestParam LocalDate dataFinal) {
+        return contatoService.listarAniversariantesDoPeriodo(dataInicial, dataFinal);
+    }
+
 }

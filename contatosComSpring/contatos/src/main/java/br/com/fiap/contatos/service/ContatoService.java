@@ -74,6 +74,20 @@ public class ContatoService {
             throw new RuntimeException("Nome não encontrado");
         }
     }
+    // consulta de nomes usando o JPQL
+    public ContatoExibicaoDto buscarContatoPeloNome(String nome) {
+        Optional<Contato> contatoOptional = contatoRepository.BuscarContatoPeloNome(nome);
+        if(contatoOptional.isPresent()) {
+            return new ContatoExibicaoDto(contatoOptional.get());
+        } else {
+            throw new RuntimeException("Nome não encontrado");
+        }
+
+    }
+    // consulta de data JPQL de um periodo de data
+    public List<ContatoExibicaoDto> listarAniversariantesDoPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+        return contatoRepository.listarAniversariantesDoPeriodo(dataInicial, dataFinal).stream().map(ContatoExibicaoDto::new).toList();
+    }
 
 
 }
