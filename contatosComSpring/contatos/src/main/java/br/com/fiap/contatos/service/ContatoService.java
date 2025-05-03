@@ -7,6 +7,8 @@ import br.com.fiap.contatos.model.Contato;
 import br.com.fiap.contatos.repository.ContatoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,11 +38,13 @@ public class ContatoService {
         }
 
     }
-    public List<ContatoExibicaoDto> listarTodosOsContatos() {
-        return contatoRepository.findAll()
-                .stream()//.stream() transforma a List (ou outra coleção) em um Stream, que é uma sequência de dados.
+    public Page<ContatoExibicaoDto> listarTodosOsContatos(Pageable paginacao) {
+        return contatoRepository.findAll(paginacao).map(ContatoExibicaoDto:: new); //aqui estou usando um recurso de paginação usando o map :: new traz já o objeto estanciado
+
+        //CÓDIGO A BAIXO COMENTADO PARA USAR UM RECURSO DE PAGINAÇÃO PAGE
+              /*  .stream()//.stream() transforma a List (ou outra coleção) em um Stream, que é uma sequência de dados.
                 .map(ContatoExibicaoDto::new)//transforma cada elemento da sequência. No caso, de Contato para ContatoExibicaoDto.
-                .toList(); //transforma o Stream de volta em uma List.
+                .toList(); //transforma o Stream de volta em uma List.*/
     }
 
 
@@ -87,6 +91,17 @@ public class ContatoService {
     // consulta de data JPQL de um periodo de data
     public List<ContatoExibicaoDto> listarAniversariantesDoPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
         return contatoRepository.listarAniversariantesDoPeriodo(dataInicial, dataFinal).stream().map(ContatoExibicaoDto::new).toList();
+    }
+
+    //consulta pelo e-mail usando métodos de consulta no repository, aqui estamos atribuindo ao um objeto Optional, se conter ele retorna a consulta
+    public ContatoExibicaoDto buscarContatoPeloEmail(String email) {
+        Optional<Contato> contatoOptional = contatoRepository.findByEmail(email);
+        if (contatoOptional.isPresent()) {
+            return new ContatoExibicaoDto(contatoOptional.get());
+        } else {
+            throw new RuntimeException("Usuario Não encontrado");
+        }
+
     }
 
 

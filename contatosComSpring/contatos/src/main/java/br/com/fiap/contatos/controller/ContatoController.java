@@ -6,6 +6,8 @@ import br.com.fiap.contatos.model.Contato;
 import br.com.fiap.contatos.service.ContatoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +29,8 @@ public class ContatoController {
 
     @GetMapping("/contatos")
     @ResponseStatus(HttpStatus.OK) //anotação de Status 200 que ocorreu tudo ok
-    public List<ContatoExibicaoDto> listarTodosOsContatos() {
-        return contatoService.listarTodosOsContatos();
+    public Page<ContatoExibicaoDto> listarTodosOsContatos(Pageable paginacao) {
+        return contatoService.listarTodosOsContatos(paginacao);
 
     }
     @GetMapping("/contatos/{id}")
@@ -80,6 +82,13 @@ public class ContatoController {
     @ResponseStatus(HttpStatus.OK)
     public List<ContatoExibicaoDto> listarAniversariantes(@RequestParam LocalDate dataInicial,@RequestParam LocalDate dataFinal) {
         return contatoService.listarAniversariantesDoPeriodo(dataInicial, dataFinal);
+    }
+
+    //consulta pelo e-mail usando métodos de consulta no repository, criando a camada no service e por fim chamando no controller.
+    @GetMapping(value = "/contato", params = "email")
+    @ResponseStatus(HttpStatus.OK)
+    public ContatoExibicaoDto buscarContatoPorEmail(@RequestParam String email) {
+        return contatoService.buscarContatoPeloEmail(email);
     }
 
 }

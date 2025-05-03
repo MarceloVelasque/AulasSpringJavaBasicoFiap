@@ -21,6 +21,8 @@ public interface ContatoRepository  extends JpaRepository<Contato, Long> {
     @Query("SELECT c FROM Contato c WHERE c.nome = :nome")
     Optional<Contato> BuscarContatoPeloNome(@Param("nome") String nome);
 
+//método usando de consulta derived query methods ou consulta derivadas de métodos, aonde estamos consultado o e=mail
+    Optional<Contato> findByEmail(String email);
 
 
     @Query ("SELECT c FROM Contato c WHERE c.dataNascimento BETWEEN :dataInicial AND :dataFinal")
