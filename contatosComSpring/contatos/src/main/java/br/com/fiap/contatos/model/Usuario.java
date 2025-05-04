@@ -1,13 +1,18 @@
 package br.com.fiap.contatos.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tbl_usuarios")
-public class Usuario {
+public class Usuario implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "SEQ_USUARIOS")
@@ -81,5 +86,49 @@ public class Usuario {
         return Objects.hash(usuarioId, nome, email, senha);
     }
 
+    //Aqui  o Collections é um genrico que extende de GrantedAuthority ou seja permissões autorizadas,
+    // o GrantedAuthority vai retornar uma lista SimpleGrantedAuthoruty se o usuarioRole for admin na nossa verificação
+    // criando assim o papel que vai ser criado/ esse prefixo ROLE_ é uma regra que tem que seguir sempre por ele antes
+    //do papel a definir
+    // caso não for uma admin ele vai retornar apenas o ROLE_USER, ou seja o usuário
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == UsuarioRole.ADMIN){
+        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+                new SimpleGrantedAuthority("ROLE_USER"));
+    } else {
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 }
