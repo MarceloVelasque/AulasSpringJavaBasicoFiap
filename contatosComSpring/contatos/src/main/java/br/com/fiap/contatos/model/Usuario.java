@@ -73,6 +73,18 @@ public class Usuario implements UserDetails{
         this.senha = senha;
     }
 
+    public UsuarioRole getRole() {
+        return role;
+    }
+
+    public void setRole(UsuarioRole role) {
+        this.role = role;
+    }
+
+
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
