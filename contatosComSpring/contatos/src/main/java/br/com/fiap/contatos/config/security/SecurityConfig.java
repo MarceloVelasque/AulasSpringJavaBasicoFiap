@@ -32,9 +32,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //aqui estamos falando Requisições GET permitem
                 .authorizeHttpRequests(authorize -> authorize.
-                        requestMatchers(HttpMethod.POST,"/auth/register").permitAll()// aqui rota vai permitir se registrar sem está autenticado
-                        // permitindo que o usuário possa se cadastrar no sistema
-
+                        requestMatchers(HttpMethod.POST,"/auth/register").permitAll()// aqui rota vai permitir se registrar sem está autenticado permitindo que o usuário possa se cadastrar no sistema
+                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()//aqui uma chamada para essa URL pode ser permitido para todos os papeis
                         .requestMatchers(HttpMethod.GET,"/api/contatos").permitAll()//método GET pra essa URL "api" eu permito todo mundo
                         .requestMatchers(HttpMethod.POST, "/api/contatos")// método POST para essa URL "api" eu quero só que usuario ADMIN
                         .hasRole("ADMIN")//AQUI SÓ VAMOS PERMITIR SE O USUÁRIO FOR ADMIN PARA QUALQUER OUTRA REQUISIÇÃO.
