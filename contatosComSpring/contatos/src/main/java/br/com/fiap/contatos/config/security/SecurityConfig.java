@@ -1,9 +1,12 @@
 package br.com.fiap.contatos.config.security;
 
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,11 +14,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private VerificarToken verificarToken;
 
     // este método configura a cadeia de filtros de segurança da aplicação
     @Bean //anotação pra dizer que está sendo gerenciado pelo spring
@@ -39,6 +46,8 @@ public class SecurityConfig {
                         .hasRole("ADMIN")//AQUI SÓ VAMOS PERMITIR SE O USUÁRIO FOR ADMIN PARA QUALQUER OUTRA REQUISIÇÃO.
                         .anyRequest()
                         .authenticated())// em em qualquer outra requisção eu só vou permitir se o usuário estiver autenticado
+                        .addFilterBefore(verificarToken, UsernamePasswordAuthenticationFilter.class) // oaddFilterBefore vai por um filtro para filtrar antes de todos os filtros aqui nesse método
+                        //esse filtro foi criado em uma classe nova dedicada a isso VerifcarToken.java
                         .build();// constrói e retorna a cadeia de filtros de segurança configurada
     }
 

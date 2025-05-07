@@ -1,8 +1,11 @@
 package br.com.fiap.contatos.controller;
 
+import br.com.fiap.contatos.config.security.TokenService;
 import br.com.fiap.contatos.dto.LoginDto;
+import br.com.fiap.contatos.dto.TokenDto;
 import br.com.fiap.contatos.dto.UsuarioCadastroDto;
 import br.com.fiap.contatos.dto.UsuarioExibicaoDto;
+import br.com.fiap.contatos.model.Usuario;
 import br.com.fiap.contatos.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class AuthController {
     @Autowired
     private UsuarioService service;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login") // mapeia requisições POST para o endpoint "/auth/login"
     public ResponseEntity login(@RequestBody @Valid LoginDto loginDto) {
         // cria um objeto de autenticação com o e-mail e senha recebidos no corpo da requisição
@@ -30,8 +36,11 @@ public class AuthController {
                 = new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.senha());
         // autentica o usuário usando o AuthenticationManager; se as credenciais forem válidas, retorna um objeto Authentication
         Authentication auth = authenticationManager.authenticate(usernamePassword);
+
+        String token = tokenService.gerarToken((Usuario) auth.getPrincipal());
+
         // retorna uma resposta HTTP 200 (OK) sem corpo
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new TokenDto(token));
     }
 
     @PostMapping("/register")
