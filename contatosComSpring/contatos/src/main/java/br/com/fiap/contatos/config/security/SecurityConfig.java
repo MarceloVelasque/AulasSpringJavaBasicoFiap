@@ -41,9 +41,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize.
                         requestMatchers(HttpMethod.POST,"/auth/register").permitAll()// aqui rota vai permitir se registrar sem está autenticado permitindo que o usuário possa se cadastrar no sistema
                         .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()//aqui uma chamada para essa URL pode ser permitido para todos os papeis
-                        .requestMatchers(HttpMethod.GET,"/api/contatos").permitAll()//método GET pra essa URL "api" eu permito todo mundo
+                        .requestMatchers(HttpMethod.GET,"/api/contatos")//método GET pra essa URL "api" eu permito todo mundo
+                        .hasAnyRole("ADMIN", "USER")//aqui estamos dizendo que para essa requisição o usuário vai ter que ter um papel Admin ou user passando uma lista com o Role
                         .requestMatchers(HttpMethod.POST, "/api/contatos")// método POST para essa URL "api" eu quero só que usuario ADMIN
                         .hasRole("ADMIN")//AQUI SÓ VAMOS PERMITIR SE O USUÁRIO FOR ADMIN PARA QUALQUER OUTRA REQUISIÇÃO.
+                        .requestMatchers(HttpMethod.PUT, "/api/contatos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/contatos").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated())// em em qualquer outra requisção eu só vou permitir se o usuário estiver autenticado
                         .addFilterBefore(verificarToken, UsernamePasswordAuthenticationFilter.class) // oaddFilterBefore vai por um filtro para filtrar antes de todos os filtros aqui nesse método
